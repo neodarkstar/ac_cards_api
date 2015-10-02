@@ -4,12 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.1",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "fast-csv": "^0.6.0",
+    "fs": "0.0.2",
+    "mongodb": "^2.0.45",
+    "mongoose": "^4.1.9",
+    "q": "^1.4.1",
+    "winston": "^1.0.2"
   }
 }
