@@ -33,8 +33,6 @@ MongoClient.connect(url, function(err, _db){
   db.resolve(_db);
 });
 
-
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -66,7 +64,34 @@ router.get('/cards', function(req, res) {
       });
 
     })
+  })
+  .get('/cards/:id', function(req, res){
+    db.promise
+      .then(function(_db){
+        var collection = _db.collection('cards');
+        var cursor = collection.find({ number: req.params.id });
 
+        cursor.count(function(err,count){
+          if(err){
+            logger.log('error', err);
+          }
+
+          if(count == 0)
+            res.status(404).send();
+          else {
+            cursor.toArray(function(err, documents){
+              if(err){
+                logger.log('error', err);
+              }
+
+              res.json(documents[0]);
+            });
+
+          }
+        })
+
+
+      })
   });
 
 app.use('/api', router);
