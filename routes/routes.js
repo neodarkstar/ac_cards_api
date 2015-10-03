@@ -13,8 +13,8 @@ router.use(function(req, res, next){
   next();
 });
 
-var cards = require('./cards.js');
-var users = require('./users.js');
+var cards = require('./cards/cards.js');
+var users = require('./users/users.js');
 
 router.use('/cards', cards);
 router.use('/users', users);
