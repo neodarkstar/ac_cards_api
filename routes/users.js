@@ -23,13 +23,24 @@ router
   })
   .get('/:id', function(req, res){
     db.then(function(_db){
-      var users = _db.collection.find({ id: req.params.id }).toArray();
+      console.log(req.params);
+      var cursor = _db.collection('users').find({ id: parseInt(req.params.id) });
 
-      
+      cursor.count(function(err,count){
+        if(err)
+          logger.log('error', err);
 
+        if(count == 0)
+          res.sendStatus(404);
 
+        cursor.toArray(function(err, documents){
+          if(err)
+            logger.log('error', err);
+
+          res.json(documents[0]);
+        })
+      });
     })
-
   })
   .post('/', function(req, res){
 
