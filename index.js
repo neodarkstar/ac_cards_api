@@ -83,15 +83,37 @@ router.get('/cards', function(req, res) {
               if(err){
                 logger.log('error', err);
               }
-
               res.json(documents[0]);
             });
-
           }
         })
-
-
       })
+  })
+  .post('/cards', function(req, res){
+    db.promise
+      .then(function(_db){
+        var collection = _db.collection('cards');
+
+        var card = {
+          number: req.body.number,
+          name: req.body.name,
+          type: req.body.type,
+          birthday: req.body.birthday,
+          sign: req.body.sign,
+          dice: req.body.dice,
+          rps: req.body.rps
+        }
+
+        collection.insert(card)
+          .then(function(err, result){
+            if(err)
+              logger.log('error', err);
+
+            logger.log('info', result);
+
+            res.status(201).send();
+          })
+      });
   });
 
 app.use('/api', router);
