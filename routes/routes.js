@@ -10,6 +10,9 @@ router.use(function(req, res, next){
     host: req.headers.host
   });
 
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
   next();
 });
 
