@@ -3,6 +3,7 @@ var router = express.Router();
 var logger = require('../../logger.js');
 var db = require('../../database.js');
 var _ = require('lodash');
+var bcrypt = require('bcrypt');
 
 
 router
@@ -41,6 +42,38 @@ router
         })
       });
     })
+  })
+  .put('/:id', function(req, res){
+      db.then(function(_db){
+        var collection = _db.collection('users');
+        var username = req.body.username;
+        var password = req.body.password;
+
+        bcrypt.genSalt(function(err, salt){
+          if(err){
+            logger.log('error', err);
+            res.sendStatus(500);
+          }
+          bcrypt.hash(password, salt, function(err, hash){
+            if(err){
+              logger.log('error', err);
+              res.sendStatus(500);
+            }
+            collection.findOneAndUpdate(
+              { id: parseInt(req.params.id) },
+              { $set: { email: username, password: hash }},
+              function(err, result){
+                if(err){
+                  logger.log('error', err);
+                  res.sendStatus(500);
+                }
+
+                res.json(result);
+              });
+          });
+        });
+
+      })
   })
   .get('/:id/cards', function(req, res){
     db.then(function(_db){
