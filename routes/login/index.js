@@ -36,6 +36,18 @@ router
 
     })
 
+  })
+  .get('/validate', function(req, res){
+    var token = req.headers.authorization;
+    jwt.verify(token, process.env.JWT_APIKEY, function(err, decoded){
+      if(err){
+        requestInfo['error'] = err;
+        logger.log('error', requestInfo);
+        res.sendStatus(401);
+      } else {
+        res.sendStatus(200);
+      }
+    });
   });
 
 function generateToken(obj){
