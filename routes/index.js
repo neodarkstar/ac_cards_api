@@ -37,7 +37,7 @@ router.use(function(req, res, next){
       } else {
         requestInfo['username'] = decoded.username;
         logger.log('info',requestInfo);
-        res.username = decoded.username;
+        req.profileInfo = { id: decoded.userId };
         next();
       }
     });

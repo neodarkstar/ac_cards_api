@@ -14,19 +14,23 @@ router
 
     db.then(function(_db){
       var collection = _db.collection('users');
-      var cursor = collection.find({ email:username }).limit(1).project({email:1, password:1, _id:0});
+      var cursor = collection.find({ email:username }).limit(1).project({email:1, password:1, _id:0, id:1});
 
       cursor.toArray(function(err, docs){
         var hash = docs[0].password;
+        var profileInfo = {
+          userId: docs[0].id
+        }
 
         bcrypt.compare(password, hash, function(err, result){
           if(err){
             logger.log('error', err);
             res.sendStatus(500);
           }
-          if(result)
-            res.json(generateToken({ username: username }));
-          else {
+          if(result){
+            console.log(profileInfo);
+            res.json(generateToken(profileInfo));
+          } else {
             res.sendStatus(401);
           }
 
