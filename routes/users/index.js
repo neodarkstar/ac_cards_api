@@ -8,10 +8,9 @@ var bcrypt = require('bcrypt');
 
 router
   .get('/', function(req, res){
-
     db.then(function(_db){
       var collection = _db.collection('users');
-      var cursor = collection.find();
+      var cursor = collection.find().project({ _id: 0, id: 1, name: 1, city: 1, state: 1, email: 1 });
 
       cursor.toArray(function(err, documents){
         if(err)
@@ -25,7 +24,7 @@ router
   })
   .get('/:id', function(req, res){
     db.then(function(_db){
-      var cursor = _db.collection('users').find({ id: parseInt(req.params.id) });
+      var cursor = _db.collection('users').find({ id: parseInt(req.params.id) }).project({ _id: 0, id: 1, name: 1, city: 1, state: 1, email: 1 });
 
       cursor.count(function(err,count){
         if(err)
