@@ -27,7 +27,9 @@ router.use(function(req, res, next){
     host: req.headers.host
   };
 
-  if(req.method !== 'OPTIONS'){
+  if(req.method === 'OPTIONS'){
+    res.sendStatus(200);
+  } else {
     var token = req.headers.authorization;
     jwt.verify(token, process.env.JWT_APIKEY, function(err, decoded){
       if(err){
@@ -41,8 +43,6 @@ router.use(function(req, res, next){
         next();
       }
     });
-  } else {
-    next();
   }
 });
 
