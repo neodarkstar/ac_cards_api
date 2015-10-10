@@ -28,7 +28,6 @@ router
             res.sendStatus(500);
           }
           if(result){
-            console.log(profileInfo);
             res.json(generateToken(profileInfo));
           } else {
             res.sendStatus(401);

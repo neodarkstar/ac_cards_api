@@ -5,7 +5,7 @@ var db = require('../../../database.js');
 var _ = require('lodash');
 
 router.all('*', function(req, res, next){
-  if(req.params.id == req.profileInfo.id){
+  if((req.method === 'OPTIONS') || (req.params.id == req.profileInfo.id)){
     next();
   } else {
     res.sendStatus(401);
@@ -68,7 +68,7 @@ router
       } else {
         cursor.count(function(err, count){
           if(err)
-            console.log('error', err);
+            logger.log('error', err);
 
           if(count == 0)
             res.sendStatus(404);
