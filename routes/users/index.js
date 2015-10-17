@@ -62,7 +62,6 @@ router
               // Insert all the cards into the new user
               var cards = _db.collection('cards').find();
               cards.toArray(function(error, cardList){
-                console.log(cardList);
                 user.cards = cardList || [];
                 var users = _db.collection('users');
                 users.insert(user, function(err, doc){
