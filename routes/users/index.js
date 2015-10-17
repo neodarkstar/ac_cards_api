@@ -10,7 +10,7 @@ router.use('/:id/cards', cardRouter);
 
 // Allow only the user to access their own stuff
 router.all('/:id', function(req, res, next){
-  if(req.params.id == req.profileInfo.id){
+  if(parseInt(req.params.id) === req.profileInfo.id){
     next();
   } else {
     res.sendStatus(401);
@@ -36,6 +36,48 @@ router
       res.sendStatus(401);
     }
 
+  })
+  .post('/', function(req, res){
+    db.then(function(_db){
+      // Set user info
+      var user = {
+        id: 2,
+        name: req.body.name,
+        city: req.body.city,
+        state: req.body.state,
+        email: req.body.email
+      }
+      bcrypt.genSalt(function(err, salt){
+        if(err){
+          logger.log('error', err);
+          res.sendStatus(500)
+        } else {
+          bcrypt.hash(req.body.password, salt, function(err, hash){
+            if(err){
+              logger.log('error', err);
+              res.sendStatus(500)
+            } else {
+              // Set the crypted password
+              user.password = hash;
+              // Insert all the cards into the new user
+              var cards = _db.collection('cards').find();
+              cards.toArray(function(error, cardList){
+                console.log(cardList);
+                user.cards = cardList || [];
+                var users = _db.collection('users');
+                users.insert(user, function(err, doc){
+                  if(err){
+                    res.status(400).send('Error inserting record');
+                  } else {
+                    res.sendStatus(201);
+                  }
+                });
+              });
+            }
+          });
+        }
+      });
+    })
   })
   .get('/:id', function(req, res){
     db.then(function(_db){

@@ -12,6 +12,11 @@ router
     var username = req.body.username;
     var password = req.body.password;
 
+    if(_.isEmpty(username) || _.isEmpty(password)){
+      res.sendStatus(401);
+      return;
+    }
+
     db.then(function(_db){
       var collection = _db.collection('users');
       var cursor = collection.find({ email:username }).limit(1).project({email:1, password:1, _id:0, id:1});
