@@ -38,9 +38,7 @@ router
           } else {
             res.sendStatus(401);
           }
-
         });
-
       });
 
     })

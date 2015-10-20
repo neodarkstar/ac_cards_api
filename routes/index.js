@@ -7,6 +7,7 @@ var jwt = require('jsonwebtoken');
 var login = require('./login');
 var cards = require('./cards');
 var users = require('./users');
+var trades = require('./trades');
 
 // Set CORS HEADERS
 router.use(function(req, res, next){
@@ -48,5 +49,6 @@ router.use(function(req, res, next){
 
 router.use('/cards', cards);
 router.use('/users', users);
+router.use('/trades', trades);
 
 module.exports = router;
